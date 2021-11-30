@@ -26,6 +26,8 @@ def main():
     # "desp":content
     # }
     # req = requests.post(api,data = data)
+
+    #设计邮件推送
     with open('email.txt','w',encoding="utf-8") as f:
         f.write(con)
     
