@@ -19,7 +19,7 @@ def main():
         con=con+i
     #设置server酱微信推送
     # api = "https://sc.ftqq.com/SCT66142TZBrDGxwOIWErfCWnWV0z719x.send"
-    # title = news_list[0]
+    title = news_list[0]
     # content = con
     # data = {
     # "text":title,
@@ -30,6 +30,8 @@ def main():
     #设计邮件推送
     with open('email.txt','w',encoding="utf-8") as f:
         f.write(con)
+    with open('title.txt','w',encoding="utf-8") as f:
+        f.write(title)
     
     
 if __name__ == "__main__":
