@@ -19,8 +19,7 @@ def main():
         con=con+i
     #设置server酱微信推送
     # api = "https://sc.ftqq.com/SCT66142TZBrDGxwOIWErfCWnWV0z719x.send"
-    title = news_list[0]
-    print(title)
+    # title = news_list[0]
     # content = con
     # data = {
     # "text":title,
