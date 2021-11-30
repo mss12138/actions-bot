@@ -28,6 +28,7 @@ def getResult(CSDN_ID):
         }
 
         soup = BeautifulSoup(response.text, "html.parser")
+        print(soup.find("a"))
 
         # 爬取asideProfile信息
         nick_name = soup.find("a", id="uid").get("title")

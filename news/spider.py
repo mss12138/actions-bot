@@ -26,6 +26,9 @@ def main():
     "desp":content
     }
     req = requests.post(api,data = data)
+    with open('email.txt','w',encoding="utf-8") as f:
+        f.write(a)
+    
     
 if __name__ == "__main__":
     main()

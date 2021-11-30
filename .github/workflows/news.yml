@@ -4,11 +4,11 @@ on:
   push:
     branches: 
       - master
-  # schedule:
-  #   - cron: '0 14 * * *'
+  schedule:
+    - cron: '30 0 * * *'
 
 jobs:
-  csdn-emailbot:
+  news:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -30,7 +30,7 @@ jobs:
           server_port: 465
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: CSDN Report
+          subject: News
           body: file://email.txt
           to: ${{ secrets.RECEIVER }}
           from: GitHub Actions
