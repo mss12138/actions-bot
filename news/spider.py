@@ -29,7 +29,7 @@ def main():
 
     #设置邮件推送
     with open('email.txt','w',encoding="utf-8") as f:
-        f.write(con)    
+        f.write(con)
     
 if __name__ == "__main__":
     main()
