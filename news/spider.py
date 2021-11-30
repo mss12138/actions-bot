@@ -14,20 +14,20 @@ def main():
     html=etree.HTML(rsp.text)
     news_list=html.xpath("//div[@class='post_body']/p[2]//text()")
     news_list=news_list[1:]
-    a=''
+    con=''
     for i in news_list[1:]:
-        a=a+i
+        con=con+i
 
     api = "https://sc.ftqq.com/SCT66142TZBrDGxwOIWErfCWnWV0z719x.send"
     title = news_list[0]
-    content = a
+    content = con
     data = {
     "text":title,
     "desp":content
     }
     req = requests.post(api,data = data)
     with open('email.txt','w',encoding="utf-8") as f:
-        f.write(a)
+        f.write(con)
     
     
 if __name__ == "__main__":
