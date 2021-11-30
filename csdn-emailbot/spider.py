@@ -79,22 +79,22 @@ def formatMessage(result):
 
 
 # 发送邮件
-# def sendEmail(content):
-#     message = MIMEText(content, 'plain', 'utf-8')
-#     message['From'] = "GitHub Actions<" + sender + ">"
-#     message['To'] = "<" + receiver + ">"
+def sendEmail(content):
+    message = MIMEText(content, 'plain', 'utf-8')
+    message['From'] = "GitHub Actions<" + sender + ">"
+    message['To'] = "<" + receiver + ">"
 
-#     subject = "CSDN Report"
-#     message['Subject'] = Header(subject, 'utf-8')
+    subject = "CSDN Report"
+    message['Subject'] = Header(subject, 'utf-8')
 
-#     try:
-#         smtpObj = smtplib.SMTP_SSL(mail_host, mail_port)
-#         smtpObj.login(mail_user, mail_password)
-#         smtpObj.sendmail(sender, receiver, message.as_string())
-#         print("邮件发送成功")
+    try:
+        smtpObj = smtplib.SMTP_SSL(mail_host, mail_port)
+        smtpObj.login(mail_user, mail_password)
+        smtpObj.sendmail(sender, receiver, message.as_string())
+        print("邮件发送成功")
 
-#     except smtplib.SMTPException:
-#         print("Error: 无法发送邮件")
+    except smtplib.SMTPException:
+        print("Error: 无法发送邮件")
 
 
 # 保存email内容
