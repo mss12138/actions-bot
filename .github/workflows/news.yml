@@ -33,5 +33,5 @@ jobs:
           subject: News
           body: file://email.txt
           to: ${{ secrets.RECEIVER }}
-          from: GitHub Actions
+          from: M
           content_type: text/plain

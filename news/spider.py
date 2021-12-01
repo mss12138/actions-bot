@@ -29,8 +29,7 @@ def main():
 
     #设置邮件推送
     with open('email.txt','w',encoding="utf-8") as f:
-        for i in news_list[1:]:
-            f.writelines(i)
+        f.write(con)
     
 if __name__ == "__main__":
     main()
