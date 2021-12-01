@@ -17,19 +17,20 @@ def main():
     con=''
     for i in news_list[1:]:
         con=con+i
-    #设置server酱微信推送
-    api = "https://sc.ftqq.com/SCT66142TZBrDGxwOIWErfCWnWV0z719x.send"
-    title = news_list[0]
-    content = con
-    data = {
-    "text":title,
-    "desp":content
-    }
-    req = requests.post(api,data = data)
+    # #设置server酱微信推送
+    # api = "https://sc.ftqq.com/SCT66142TZBrDGxwOIWErfCWnWV0z719x.send"
+    # title = news_list[0]
+    # content = con
+    # data = {
+    # "text":title,
+    # "desp":content
+    # }
+    # req = requests.post(api,data = data)
 
     #设置邮件推送
     with open('email.txt','w',encoding="utf-8") as f:
-        f.write(con)
+        for i in news_list[1:]:
+            f.writelines(i)
     
 if __name__ == "__main__":
     main()
