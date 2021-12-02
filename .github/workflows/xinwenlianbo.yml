@@ -1,0 +1,37 @@
+name: 'GitHub Actions News'
+
+on:
+  push:
+    branches: 
+      - master
+  schedule:
+    - cron: '30 23 * * *'
+
+jobs:
+  news:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: 'Set up Python'
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+      # - name: 'Install dependencies'
+      #   run: python -m pip install --upgrade pip
+      - name: 'Install requirements'
+        run: pip install -r ./xinwenlianbo/requirements.txt
+      - name: 'Working'
+        run: bash ./xinwenlianbo/main.sh
+      - name: 'Send mail'
+        uses: dawidd6/action-send-mail@master
+        with:
+          server_address: smtp.163.com
+          server_port: 465
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: 新闻联播
+          body: file://email.txt
+          to: ${{ secrets.RECEIVER }}
+          from: Ms
+          content_type: text/plain
