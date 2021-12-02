@@ -1,4 +1,4 @@
-name: 'GitHub Actions News'
+name: 'XinWenLianBo'
 
 on:
   push:
