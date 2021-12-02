@@ -1,65 +1,69 @@
-import datetime
+import re
 import requests
 from lxml import etree
-from lxml.html import tostring
-import re
-# from pywchat import Sender
- 
- 
- 
-def get_url(url):
-    # 抓取url
-    header = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.183 Safari/537.36",
-        "Host": "mrxwlb.com",
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9"
-    }
-    date_time = (datetime.date.today() + datetime.timedelta(-1)).strftime("%Y-%#m-%#d").replace('-', '{}').format('年','月') + "日新闻联播文字版"
-    
-    url = url + "/{}".format(date_time)
+import datetime
+
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4651.0 Safari/537.36'
+}
+
+
+# 获取新闻
+def get_hanlder(url):
     try:
-        rsp = requests.get(url, headers=header, timeout=5)
+        rsp = requests.get(url, headers=headers, timeout=5)
         rsp.raise_for_status()
         rsp.encoding = rsp.apparent_encoding
-        # print(rsp.text)
         return rsp.text
     except requests.RequestException as error:
         print(error)
- 
- 
-def data_handle(data):
-    # 提取标签中的html格式
-    etr = etree.HTML(data)
-    news_content = etr.xpath('//div[@class="posts-wrapper"]/article')[0]
- 
-    news_contens = tostring(news_content, encoding='utf-8').decode('utf-8')
-    # print(news_contens)
-    # print("*"*10)
-    news_text = re.sub("————–<br>[\\s\\S]*", "", news_contens)
- 
-    # 增加对敏感字符的处理
-    # news_text = re.sub('习近平', "习大大", news_text)
-    #
-    # print(news_text)
+        exit()
 
-    # #设置企业微信发送消息
-    # cid='ww8661fac8750ba9d9'
-    # secret='vnkoEYUQ_QBpeJgbL1axWfkdO9QdcfcI9v6YG7eqzfY'
-    # agentid=1000003
-    # app = Sender(cid,secret,agentid)
-    # app.send_text(news_text)
+
+def get_news(url):
+    """
+    新闻联播获取函数
+    """
+    rsp = get_hanlder(url)
+    etr = etree.HTML(rsp)
+    titles = etr.xpath("//div[@class='title']/text()")
+    hrefs = etr.xpath("//li/a/@href")
+
+    news = []
+    summary = None
+    for title, href in zip(titles, hrefs):
+        if '《新闻联播》' in title:
+            # 获取新闻概要
+            title_rsp = get_hanlder(href)
+            summary = '<div>' + re.search(r'</em>本期节目主要内容：[\s\S]*。', title_rsp).group(
+                0) + "</div>\n\n\n"
+            continue
+
+        # 新闻标题去掉视频并处理成超链接  橙色 #D2691E
+        tit = title.replace("[视频]", "")
+        subtitle = f'<a href=\"{href}\" style="color:#4682B4"><b>{tit}</b></a>'
+        summary = re.sub(tit, subtitle, summary)
+
+        # 获取新闻正文并添加到news
+        news_text = get_hanlder(href)
+        news_th = re.findall(r'.*(<div class="cnt_bd"><!--repaste.body.begin-->.*?</div>).*', news_text)[0]
+        news.append(f"{subtitle}\n{news_th}")
+
+    news.insert(0,summary)
+
 
     #设置邮件推送
     with open('email.txt','w',encoding="utf-8") as f:
-        f.write(news_text)
- 
- 
-
-
-uri = "http://mrxwlb.com"
- 
-rsp = get_url(uri)
-news_content = data_handle(rsp)
+        f.write(''.join(news))
 
 
 
+
+
+
+# 获取日期
+strTime = (datetime.date.today() + datetime.timedelta(-1)).strftime("%Y%m%d")
+
+url = f'https://tv.cctv.com/lm/xwlb/day/{strTime}.shtml'
+
+news_text = get_news(url)
